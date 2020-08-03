@@ -1,11 +1,13 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import AddTodos from "./AddTodos";
+import TodoList from "./TodoList";
+import "./App.css";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
+      value: "",
       todos: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -13,27 +15,33 @@ class App extends React.Component {
   }
   handleSubmit(event) {
     event.preventDefault();
-    this.setState({todos: [...this.state.todos, this.state.value], value: ''});
+    this.setState({
+      value: "",
+      todos: [...this.state.todos, this.state.value]
+    });
   }
   handleChange(event) {
-    this.setState({value: event.target.value});
+    this.setState({ value: event.target.value });
+    console.log(this.state.value);
+  }
+  componentDidMount() {
+    // fetch("http://simpletodolistapi.herokuapp.com/")
+    //   .then(data => data.json())
+    //   .then(todos => this.setState({ todos }));
   }
   render() {
     const list = this.state.todos.map((val, ind) => {
-        return <li key={ind}>{val}</li>
+      return <TodoList val={val} ind={ind} />;
     });
     return (
       <div className="todo-list">
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Add TODO:
-            <input type="text" value={this.state.value} onChange={this.handleChange} />
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
-        <ul>
-          {list}
-        </ul>
+        <AddTodos
+          handleSubmit={this.handleSubmit}
+          handleChange={this.handleChange}
+          value={this.state.value}
+        />
+        <br />
+        {list}
       </div>
     );
   }
