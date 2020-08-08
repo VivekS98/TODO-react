@@ -10,34 +10,75 @@ class App extends React.Component {
       value: "",
       todos: []
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+  }
+   async fetchRequest(method,url,body) {
+    const result = await fetch(url,{
+      method: method,
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    })
+    return result;
+  }
+  complete(val) {
+    const result = this.fetchRequest( 'PUT', `/api/todos/${val._id}`, {...val, completed: !val.completed} )
+      result.then(data => data.json())
+            .then(data => {
+              this.setState({todos: this.state.todos.map((value => {
+                if(value.title === val.title) {
+                  return {...val, completed: !value.completed}
+                } else return value;
+              }))})
+              return data;
+            })
+            .then(data => console.log(data))
+  }
+  deleteTodo(val) {
+    const result = this.fetchRequest('DELETE', `/api/todos/${val._id}`)
+        result.then(data => data.json())
+              .then(data => {
+                this.setState({todos: this.state.todos.filter(valu => {
+                  return valu._id !== val._id;
+                })})
+                return data;
+              })
+              .then(data => console.log(data));
   }
   handleSubmit(event) {
     event.preventDefault();
-    this.setState({
-      value: "",
-      todos: [...this.state.todos, this.state.value]
-    });
+    const result = this.fetchRequest( 'POST', "/api/todos", {title: this.state.value} );
+    result.then(data => data.json())
+          .then(data => this.setState({todos: [...this.state.todos, data], value: ""}))
+          .then(data => console.log(data));
   }
   handleChange(event) {
     this.setState({ value: event.target.value });
     console.log(this.state.value);
   }
   componentDidMount() {
-    // fetch("http://simpletodolistapi.herokuapp.com/")
-    //   .then(data => data.json())
-    //   .then(todos => this.setState({ todos }));
+    const response = this.fetchRequest( 'GET', "/api/todos" )
+      response.then(data => data.json())
+      .then(data => {
+        console.log(data);
+        return data;
+      })
+      .then(todos => this.setState({ todos }));
   }
   render() {
     const list = this.state.todos.map((val, ind) => {
-      return <TodoList val={val} ind={ind} />;
+      return <TodoList 
+                key={ind} 
+                val={val} 
+                deleteTodo={(val) => this.deleteTodo(val)}
+                complete={(val) => this.complete(val)} 
+            />;
     });
     return (
       <div className="todo-list">
         <AddTodos
-          handleSubmit={this.handleSubmit}
-          handleChange={this.handleChange}
+          handleSubmit={(e) => this.handleSubmit(e)}
+          handleChange={(e) => this.handleChange(e)}
           value={this.state.value}
         />
         <br />

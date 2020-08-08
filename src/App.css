@@ -3,6 +3,58 @@
   margin: 3vh;
 }
 
+form {
+  font-size: x-large;
+}
+
+input {
+  margin: 1vh;
+  font-size: x-large;
+  border-radius: 5px;
+}
+
 .todo {
-  background-color: whitesmoke;
+  background-color: lightgray;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  margin: 2vh 3vh;
+  padding: 0vh 1vh;
+  border-radius: 1.5vh;
+  cursor: default;
+  list-style: none;
+  font-size: x-large;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.todo-done {
+  color: grey;
+  background-color: lightgray;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2vh 3vh;
+  width: 90%;
+  padding: 0vh 1vh;
+  border-radius: 1.5vh;
+  list-style: none;
+  cursor: default;
+  font-size: x-large;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.delete-todo {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  padding: 1vh;
+  border-radius: 50%;
+}
+
+.todo-wrap {
+  display: flex;
+  flex-direction: row;
 }
